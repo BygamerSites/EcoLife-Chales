@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco Life - Reservas de Chalés</title>
+    <style>
+        /* Estilos Globais e Cores Inspiradas na Natureza */
+        :root {
+            --primary-color: #2d6a4f;
+            --secondary-color: #40916c;
+            --accent-color: #1b4332;
+            --background: #f4f9f4;
+            --text-color: #2b2d42;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        /* Barra de Navegação */
+        header {
+            background-color: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .login-btn {
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .login-btn:hover {
+            background-color: var(--secondary-color);
+        }
+
+        /* Container Principal */
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .section-title {
+            margin-bottom: 2rem;
+            color: var(--accent-color);
+            font-size: 2rem;
+        }
+
+        /* Grid de Chalés */
+        .chales-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .chale-card {
+            background: var(--white);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+
+        .chale-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .chale-img {
+            width: 100%;
+            height: 250px;
+            background-color: #cbd5e1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #64748b;
+            font-weight: bold;
+            background-image: linear-gradient(135deg, #a3b19b 0%, #576856 100%);
+        }
+
+        .chale-info {
+            padding: 1.5rem;
+        }
+
+        .chale-name {
+            font-size: 1.5rem;
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .chale-tagline {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .btn-detalhes {
+            display: inline-block;
+            width: 100%;
+            text-align: center;
+            background-color: var(--secondary-color);
+            color: var(--white);
+            padding: 0.8rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-detalhes:hover {
+            background-color: var(--primary-color);
+        }
+
+        /* Páginas Ocultas dinamicamente (Detalhes e Login) */
+        .page-view {
+            display: none;
+        }
+
+        .page-view.active {
+            display: block;
+        }
+
+        /* Tela de Detalhes do Chalé */
+        .detalhes-container {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+        }
+
+        .detalhes-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .detalhes-grid { grid-template-columns: 1fr; }
+        }
+
+        .diferenciais-list {
+            list-style: none;
+            margin: 1.5rem 0;
+        }
+
+        .diferenciais-list li {
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Formulário de Agendamento */
+        .booking-box {
+            border: 1px solid #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            background: #f8fafc;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 0.7rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+        }
+
+        /* Opções de Pagamento */
+        .payment-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .pay-card {
+            border: 2px solid #cbd5e1;
+            padding: 0.5rem;
+            text-align: center;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .pay-card.selected {
+            border-color: var(--primary-color);
+            background-color: #e8f5e9;
+        }
+
+        /* Modal / Área de Login */
+        .login-box {
+            max-width: 400px;
+            margin: 4rem auto;
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header / Navbar -->
+    <header>
+        <div class="nav-container">
+            <a href="#" class="logo" onclick="showPage('home')">🌿 Eco Life</a>
+            <button class="login-btn" id="authBtn" onclick="showPage('login')">Entrar / Cadastrar</button>
+        </div>
+    </header>
+
+    <main>
+        
+        <!-- VISÃO 1: HOME (Lista de Chalés) -->
+        <div id="page-home" class="page-view active">
+            <h2 class="section-title">Encontre o chalé ideal para sua conexão com a natureza</h2>
+            
+            <div class="chales-grid">
+                <!-- Chalé Alfazema -->
+                <div class="chale-card">
+                    <div class="chale-img">Chalé Alfazema</div>
+                    <div class="chale-info">
+                        <h3 class="chale-name">Chalé Alfazema</h3>
+                        <p class="chale-tagline">Luxo, privacidade e uma vista inesquecível.</p>
+                        <button class="btn-detalhes" onclick="showPage('detalhes')">Detalhes</button>
+                    </div>
+                </div>
+                
+                <!-- Placeholder para futuros chalés da sua empresa -->
+                <div class="chale-card" style="opacity: 0.6;">
+                    <div class="chale-img" style="background: #e2e8f0; color: #94a3b8;">Em breve</div>
+                    <div class="chale-info">
+                        <h3 class="chale-name">Próximo Destino</h3>
+                        <p class="chale-tagline">Novas experiências eco-friendly estão sendo preparadas.</p>
+                        <button class="btn-detalhes" disabled style="background:#cbd5e1; cursor:not-allowed;">Indisponível</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VISÃO 2: DETALHES DO CHALÉ E AGENDAMENTO -->
+        <div id="page-detalhes" class="page-view">
+            <button class="back-btn" onclick="showPage('home')">← Voltar para a lista</button>
+            
+            <div class="detalhes-container">
+                <div class="detalhes-grid">
+                    
+                    <!-- Lado Esquerdo: Descrição e Diferenciais -->
+                    <div>
+                        <h2 style="font-size: 2.5rem; color: var(--accent-color);">Chalé Alfazema</h2>
+                        <p style="margin-top: 1rem; color: #4a5568;">
+                            O Chalé Alfazema foi desenhado para quem busca desconectar do ritmo urbano e se integrar perfeitamente à calmaria da Eco Life. Viva momentos únicos com total conforto e sofisticação sustentável.
+                        </p>
+                        
+                        <h3 style="margin-top: 2rem; color: var(--primary-color);">Diferenciais do Chalé:</h3>
+                        <ul class="diferenciais-list">
+                            <li>🛁 <strong>1 Banheira de hidromassagem</strong> privativa</li>
+                            <li>🏊‍♂️ <strong>1 Piscina</strong> exclusiva</li>
+                            <li>🚿 <strong>Banheiro com chuveiro e teto de clarabóia</strong> (tome banho olhando as estrelas!)</li>
+                            <li>👥 Comporta confortavelmente até <strong>5 pessoas</strong></li>
+                        </ul>
+                    </div>
+
+                    <!-- Lado Direito: Caixa de Reserva -->
+                    <div class="booking-box">
